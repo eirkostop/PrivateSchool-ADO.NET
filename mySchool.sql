@@ -17,7 +17,7 @@ CREATE TABLE [Student]
 [DateOfBirth]    date ,
 [TuitionFees]	money 
 );
-CREATE TABLE [Trainer]
+create table [Trainer]
 (
 [TrainerId]     int IDENTITY (1, 1) primary key ,
 [FirstName]     varchar(50) ,

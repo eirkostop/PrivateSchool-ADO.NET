@@ -19,18 +19,13 @@ namespace assignment2
                 if (prop.PropertyType.Name == "DateTime")
                 {
                     DateTime value;
-                    while (!DateTime.TryParse(Console.ReadLine(), out value))
+                    DateTime rngMin = (DateTime)System.Data.SqlTypes.SqlDateTime.MinValue;
+                    DateTime rngMax = (DateTime)System.Data.SqlTypes.SqlDateTime.MaxValue;
+                    while (!DateTime.TryParse(Console.ReadLine(), out value)|(value > rngMax | value < rngMin))
                     {
                         Console.Write(" Wrong Input. Enter a valid date (d/m/y):");
                     }
-                    DateTime rngMin = Convert.ToDateTime("1753/1/1");
-
-                    DateTime rngMax = Convert.ToDateTime("9999/12/31");
-                    while (value > rngMin && value < rngMin)
-                    {
-                        Console.Write(" Enter a correct date:");
-                        value = DateTime.Parse(Console.ReadLine());
-                    }
+                    
                     prop.SetValue(t, value);
                 }
                 else if (prop.PropertyType.Name == "Decimal")

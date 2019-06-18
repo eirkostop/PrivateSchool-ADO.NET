@@ -15,8 +15,10 @@ namespace assignment2
             Thread.CurrentThread.CurrentCulture = new CultureInfo("el-GR");
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("el-GR");
             Console.OutputEncoding = System.Text.Encoding.Unicode;//Για να εμφανίζει το €
+
             DbManager db = new DbManager();
             new Menu(db);
+
         }
     }
 }

@@ -8,70 +8,70 @@ namespace assignment2
 {
     class Student
     {
-        public int StudentId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public DateTime DateOfBirth { get; set; }
-        public decimal TuitionFees { get; set; }
+        public int StudentId { private get; set; }
+        public string FirstName { private get; set; }
+        public string LastName { private get; set; }
+        public DateTime DateOfBirth { private get; set; }
+        public decimal TuitionFees { private get; set; }
     }
     class Trainer
     {
-        public int TrainerId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public int TrainerId { private get; set; }
+        public string FirstName { private get; set; }
+        public string LastName { private get; set; }
         public string subject { private get; set; }
     }
     class Assignment
     {
-        public int AssignmentId { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public DateTime SubmissionDate { get; set; }
+        public int AssignmentId { private get; set; }
+        public string Title { private get; set; }
+        public string Description { private get; set; }
+        public DateTime SubmissionDate { private get; set; }
     }
     class Course
     {
-        public int CourseId { get; set; }
-        public string Title { get; set; }
-        public string Stream { get; set; }
-        public string Type { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public int CourseId { private get; set; }
+        public string Title { private get; set; }
+        public string Stream { private get; set; }
+        public string Type { private get; set; }
+        public DateTime StartDate { private get; set; }
+        public DateTime EndDate { private get; set; }
     }
     class StudentPerCourse
     {
-        public int CourseId { get; set; }
-        public string Course { get; set; }
-        public int StudentId { get; set; }
-        public string Name { get; set; }
+        public int CourseId { private get; set; }
+        public string Course { private get; set; }
+        public int StudentId { private get; set; }
+        public string Name { private get; set; }
     }
     class TrainerPerCourse
     {
-        public int CourseId { get; set; }
+        public int CourseId { private get; set; }
         public string Course { private get; set; }
-        public int TrainerId { get; set; }
-        public string Name { get; set; }
+        public int TrainerId { private get; set; }
+        public string Name { private get; set; }
     }
     class AssignmentPerCourse
     {
-        public int CourseId { get; set; }
-        public string Course { get; set; }
-        public int AssignmentId { get; set; }
-        public string Assignment { get; set; }
+        public int CourseId { private get; set; }
+        public string Course { private get; set; }
+        public int AssignmentId { private get; set; }
+        public string Assignment { private get; set; }
     }
     class AssignmentPerCoursePerStudent
     {
-        public int StudentId { get; set; }
-        public string Name { get; set; }
-        public string Course { get; set; }
-        public string Assignments { get; set; }
-        public int OralMark { get; set; }
-        public int TotalMark { get; set; }
+        public int StudentId { private get; set; }
+        public string Name { private get; set; }
+        public string Course { private get; set; }
+        public string Assignments { private get; set; }
+        public int OralMark { private get; set; }
+        public int TotalMark { private get; set; }
     }
     class StudentInMoreCourses
     {
-        public int StudentId { get; set; }
-        public string Name { get; set; }
-        public int NumberOfCourses { get; set; }
+        public int StudentId { private get; set; }
+        public string Name { private get; set; }
+        public int NumberOfCourses { private get; set; }
     }
     class XInCourse
     {

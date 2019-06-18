@@ -7,49 +7,9 @@ using System.Data.SqlClient;
 
 namespace assignment2
 {
-
-    class PrintableList<T> : List<T>
-    {
-        public override string ToString()
-        {
-            string rows = string.Empty;
-            rows += "\n----------------------------------------------------------------------------------------\n";
-            foreach (var prop in typeof(T).GetProperties())
-            {
-                rows += string.Format(" {0,-18}", prop.Name);
-            }
-            rows += "\n----------------------------------------------------------------------------------------";
-
-            foreach (T o in this)
-            {
-                rows += "\n";
-                foreach (var prop in o.GetType().GetProperties())
-                {
-                    if (prop.PropertyType == typeof(DateTime))
-                    {
-                        rows += string.Format(" {0,-18:d}", prop.GetValue(o));
-                    }
-                    else if (prop.PropertyType == typeof(Decimal))
-                    {
-                        rows += string.Format(" {0,-18:c}", prop.GetValue(o));
-                    }
-                    else
-                    {
-                        rows += string.Format(" {0,-18}", prop.GetValue(o));
-                    }
-                }
-            }
-            if (this.Count == 0)
-            {
-                rows += "\n No entries";
-            }
-            return rows;
-        }
-    }
     class DbManager
     {
-        public string SuccessMesssage { get; private set; }
-        private readonly string conn_string = @"Data Source=DESKTOP-66O4UV9\SQLEXPRESS;Initial Catalog=School;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        private readonly string conn_string = @"Data Source=LYSISTRAT\SQLEXPRESS;Initial Catalog=School;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         public PrintableList<T> ListOf<T>() where T : new()
         {
             PrintableList<T> list = new PrintableList<T>();
@@ -98,7 +58,7 @@ namespace assignment2
                     cmd.ExecuteNonQuery();
                 }
             }
-            SuccessMesssage = $" {typeof(T).Name} added.";
+            Menu.SuccessMessage = $" {typeof(T).Name} added.";
         }
         public void AddToCourse(XInCourse x)
         {
@@ -136,8 +96,46 @@ namespace assignment2
                     cmd.ExecuteNonQuery();
                 }
             }
-            if (exists)   SuccessMesssage= $" {x.Name} with id {x.Id} added to Course with id {x.CourseId}.";
-            else SuccessMesssage = $" {x.Name} not added.\n Check if both {x.Name} and Course exist or if {x.Name} is already in Course.";
+            if (exists)   Menu.SuccessMessage= $" {x.Name} with id {x.Id} added to Course with id {x.CourseId}.";
+            else Menu.SuccessMessage = $" {x.Name} not added.\n Check if both {x.Name} and Course exist or if {x.Name} is already in Course.";
+        }
+    }
+    class PrintableList<T> : List<T>
+    {
+        public override string ToString()
+        {
+            string rows = string.Empty;
+            rows += "\n----------------------------------------------------------------------------------------\n";
+            foreach (var prop in typeof(T).GetProperties())
+            {
+                rows += string.Format(" {0,-18}", prop.Name);
+            }
+            rows += "\n----------------------------------------------------------------------------------------";
+
+            foreach (T o in this)
+            {
+                rows += "\n";
+                foreach (var prop in o.GetType().GetProperties())
+                {
+                    if (prop.PropertyType == typeof(DateTime))
+                    {
+                        rows += string.Format(" {0,-18:d}", prop.GetValue(o));
+                    }
+                    else if (prop.PropertyType == typeof(Decimal))
+                    {
+                        rows += string.Format(" {0,-18:c}", prop.GetValue(o));
+                    }
+                    else
+                    {
+                        rows += string.Format(" {0,-18}", prop.GetValue(o));
+                    }
+                }
+            }
+            if (this.Count == 0)
+            {
+                rows += "\n No entries";
+            }
+            return rows;
         }
     }
 }

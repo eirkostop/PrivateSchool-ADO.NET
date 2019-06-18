@@ -8,22 +8,8 @@ namespace assignment2
 {
     class Menu
     {
-        #region print navigation options
-        private readonly string options =
-               "\n****************************************************************************************" +
-               "\n 1: list all students                          | 10: add new student " +
-               "\n 2: list all trainers                          | 11: add new trainer  " +
-               "\n 3: list all assignments                       | 12: add new assignment  " +
-               "\n 4: list all courses                           | 13: add new course  " +
-               "\n 5: list students per course                   | 14: add student to course " +
-               "\n 6: list trainers per course                   | 15: add trainer to course " +
-               "\n 7: list assignments per course                | 16: add assignment to course" +
-               "\n 8: list assignments per student per course    | 17: exit " +
-               "\n 9: list students in more than one course      | " +
-               "\n****************************************************************************************" +
-               "\n Please choose an action from the menu (1-17):"; 
-        #endregion
-        #region  methods
+        #region  properties and methods
+        public static string SuccessMessage { private get; set; }
         private static T New<T>() where T : new()
         {
             T t = new T();
@@ -36,6 +22,14 @@ namespace assignment2
                     while (!DateTime.TryParse(Console.ReadLine(), out value))
                     {
                         Console.Write(" Wrong Input. Enter a valid date (d/m/y):");
+                    }
+                    DateTime rngMin = Convert.ToDateTime("1753/1/1");
+
+                    DateTime rngMax = Convert.ToDateTime("9999/12/31");
+                    while (value > rngMin && value < rngMin)
+                    {
+                        Console.Write(" Enter a correct date:");
+                        value = DateTime.Parse(Console.ReadLine());
                     }
                     prop.SetValue(t, value);
                 }
@@ -74,14 +68,28 @@ namespace assignment2
             }
             x.CourseId = value;
             return x;
-        } 
+        }
+        #endregion
+        #region print navigation options
+        private readonly string options =
+               "\n****************************************************************************************" +
+               "\n 1: list all students                          | 10: add new student " +
+               "\n 2: list all trainers                          | 11: add new trainer  " +
+               "\n 3: list all assignments                       | 12: add new assignment  " +
+               "\n 4: list all courses                           | 13: add new course  " +
+               "\n 5: list students per course                   | 14: add student to course " +
+               "\n 6: list trainers per course                   | 15: add trainer to course " +
+               "\n 7: list assignments per course                | 16: add assignment to course" +
+               "\n 8: list assignments per student per course    | 17: exit " +
+               "\n 9: list students in more than one course      | " +
+               "\n****************************************************************************************" +
+               "\n Please choose an action from the menu (1-17):";
         #endregion
         #region execute navigation options
         public Menu(DbManager db)
         {
             Console.WriteLine(" Welcome to our school!");
-            bool exit = false;
-            while (!exit)
+            while (true)
             {
                 Console.Write(options);
                 string option = Console.ReadLine();
@@ -136,13 +144,14 @@ namespace assignment2
                         db.AddToCourse(NewToCourse("Assignment"));
                         break;
                     case "17":
-                        exit = true;
+                        Environment.Exit(0);
                         break;
                     default:
-                        Console.WriteLine("Wrong input.");
+                        Console.WriteLine(" Wrong input.");
                         break;
                 }
-                Console.WriteLine(db.SuccessMesssage);
+                Console.WriteLine(SuccessMessage);
+                SuccessMessage = string.Empty;
             }
         } 
         #endregion

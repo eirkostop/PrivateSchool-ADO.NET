@@ -119,59 +119,76 @@ insert into [Trainer in Course] values
    (1,2),(1,3),(2,3),(2,4),(3,4),(4,1),(4,2);
 go
 --•A list of all the students [2 marks]
+create procedure GetStudent as
+begin
 select * from Student;
+end
 go
 --• A list of all the trainers [2 marks]
+create procedure GetTrainer as
+begin
 select * from Trainer;
+end
+go
 --• A list of all the assignments [2 marks]
+create procedure GetAssignment as
+begin
 select * from Assignment;
+end
 go
 --• A list of all the courses [2 marks]
+create procedure GetCourse as
+begin
 select * from Course;
+end
 go
 --• All the students per course [2 marks]
-create view StudentPerCourse as
-	select top 100 percent s.StudentId, concat(s.FirstName,' ', s.LastName) as [Name], c.Title as [Course], c.CourseId from Student s
+create procedure GetStudentPerCourse as
+	begin select  c.CourseId, c.Title as [Course], s.StudentId, concat(s.FirstName,' ', s.LastName) as [Name] from Student s
 	join [Student in Course] sc on sc.StudentId=s.StudentId
 	join [Course] c on sc.CourseId=c.CourseId
-	order by c.CourseId asc;
-go
-select * from StudentPerCourse;
+	order by c.CourseId, s.StudentId;
+	end
 go
 --• All the trainers per course [2 marks]
-create view TrainerPerCourse as
-	select top 100 percent t.TrainerId, concat(t.FirstName,' ',t.LastName) as [Name],c.Title  as [Course], c.CourseId from Trainer t
+create procedure GetTrainerPerCourse as
+begin
+	select c.CourseId,c.Title  as [Course], t.TrainerId, concat(t.FirstName,' ',t.LastName) as [Name] from Trainer t
 	join [Trainer in Course] tc on tc.TrainerId=t.TrainerId
 	join [Course] c on tc.CourseId=c.CourseId
-	order by c.CourseId asc;
-go
-select * from TrainerPerCourse;
+	order by c.CourseId, t.TrainerId;
+end
 go
 --• All the assignments per course [2 marks]
-create view AssignmentPerCourse as
-	select top 100 percent  a.AssignmentId,a.Title as [Assignment], c.Title as [Course], c.CourseId from Assignment a
+create procedure GetAssignmentPerCourse as
+	begin
+	select  c.CourseId, c.Title as [Course], a.AssignmentId,a.Title as [Assignment] from Assignment a
 	join [Assignment in Course] ac on ac.AssignmentId=a.AssignmentId
-	join [Course] c on ac.CourseId=c.CourseId;
-go
-select * from AssignmentPerCourse;
+	join [Course] c on ac.CourseId=c.CourseId
+	order by c.CourseId, a.AssignmentId;
+	end
 go
 --• All the assignments per course per student [2 marks]
-create view AssignmentPerCoursePerStudent as
-	select  distinct top 100 percent (s.StudentId), concat(s.FirstName, s.LastName) as Name,c.Title as [Course], a.Title as[Assignments], isnull(m.OralMark,0) as OralMark, isnull(m.TotalMark,0) as TotalMark from Student s
+
+create procedure GetAssignmentPerCoursePerStudent as
+begin
+	select  distinct (s.StudentId), concat(s.FirstName, s.LastName) as Name,c.Title as [Course], a.Title as[Assignments], isnull(m.OralMark,0) as OralMark, isnull(m.TotalMark,0) as TotalMark from Student s
 	join [Student in Course] sc on sc.StudentId=s.StudentId
 	join Course c on c.CourseId=sc.CourseId
 	join [Assignment in Course] ac on c.CourseId=ac.CourseId
 	join Assignment a on a.AssignmentId=ac.AssignmentId
 	left join Marks m on m.AssignmentId=a.AssignmentId and s.StudentId=m.StudentId
 	order by s.StudentId ,c.Title;
-go
-select * from AssignmentPerCoursePerStudent;
+end
 go
 create procedure addMark (@studentId int, @AssignmentId int, @oralMark int, @totalMark int)  as
 	begin
-	if exists (select * from [AssignmentPerCoursePerStudent] apspc
-	join Assignment a on apspc.Assignments=a.Title
-    where studentId=@studentId and AssignmentId=@AssignmentId)
+	if exists (select * from  Assignment a 
+	join [Assignment in Course]  ac	on a.AssignmentId=ac.AssignmentId
+	join Course c on c.CourseId=ac.CourseId
+	join [Student In Course] sc on c.CourseId=sc.CourseId
+	join Student s on s.StudentId=sc.StudentId
+    where s.studentId=@studentId and a.AssignmentId=@AssignmentId)
 	begin
 		if not  exists (select * from Marks where studentId=@studentId and AssignmentId=@AssignmentId)
 		begin
@@ -194,14 +211,15 @@ exec addMark 11,3,50,100; --example where mark is not inserted because student d
 go
 
 --• A list of students that belong to more than one courses [3 marks]
-create view StudentInMoreCourses as
+create procedure GetStudentInMoreCourses as
+begin
 	select top 100 percent s.StudentId, concat(s.FirstName,' ', s.LastName) as Name, count(c.CourseId) as NumberOfCourses from Student s
 	join [Student in Course] sc on s.StudentId=sc.StudentId
 	join Course c on c.CourseId=sc.CourseId
 	group by s.StudentId, s.FirstName, s.LastName having count(c.courseId)>1;
+end
 go
-select * from StudentInMoreCourses;
-go
+
 create procedure AddStudent(@firstName varchar,@lastName varchar,@DateOfBirth Date,@TuitionFees decimal) as
 begin
 insert into Student(FirstName,LastName,DateOfBirth,TuitionFees) values(@firstName,@lastName,@DateOfBirth,@TuitionFees)

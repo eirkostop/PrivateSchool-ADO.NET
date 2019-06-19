@@ -16,16 +16,16 @@ namespace assignment2
             using (SqlConnection conn = new SqlConnection(conn_string))
             {
                 conn.Open();
-                using (SqlCommand cmd = new SqlCommand($"select * from {typeof(T).Name}", conn))
+                using (SqlCommand cmd = new SqlCommand($"exec Get{typeof(T).Name}", conn))
                 {
                     using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
                         while (rdr.Read())
                         {
                             T t = new T();
-                            foreach(var prop in typeof(T).GetProperties())
+                            foreach (var prop in typeof(T).GetProperties())
                             {
-                                prop.SetValue(t, Convert.ChangeType(rdr[prop.Name], prop.PropertyType)) ;
+                                prop.SetValue(t, Convert.ChangeType(rdr[prop.Name], prop.PropertyType));
                             }
                             list.Add(t);
                         }
@@ -38,7 +38,7 @@ namespace assignment2
         {
             string properties()
             {
-                string str=string.Empty;
+                string str = string.Empty;
                 foreach (var prop in t.GetType().GetProperties().Skip(1))
                 {
                     str += $",@{prop.Name}";
@@ -51,7 +51,7 @@ namespace assignment2
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand($"insert into {typeof(T).Name} values ({properties()})", conn))
                 {
-                    foreach(var prop in t.GetType().GetProperties())
+                    foreach (var prop in t.GetType().GetProperties())
                     {
                         cmd.Parameters.Add(new SqlParameter(prop.Name, prop.GetValue(t)));
                     }
@@ -62,7 +62,7 @@ namespace assignment2
         }
         public void AddToCourse(XInCourse x)
         {
-            bool exists=false;
+            bool exists = false;
             using (SqlConnection conn = new SqlConnection(conn_string))
             {
                 conn.Open();
@@ -96,7 +96,7 @@ namespace assignment2
                     cmd.ExecuteNonQuery();
                 }
             }
-            if (exists)   Menu.SuccessMessage= $" {x.Name} with id {x.Id} added to Course with id {x.CourseId}.";
+            if (exists) Menu.SuccessMessage = $" {x.Name} with id {x.Id} added to Course with id {x.CourseId}.";
             else Menu.SuccessMessage = $" {x.Name} not added.\n Check if both {x.Name} and Course exist or if {x.Name} is already in Course.";
         }
     }

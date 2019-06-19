@@ -21,11 +21,11 @@ namespace assignment2
                     DateTime value;
                     DateTime rngMin = (DateTime)System.Data.SqlTypes.SqlDateTime.MinValue;
                     DateTime rngMax = (DateTime)System.Data.SqlTypes.SqlDateTime.MaxValue;
-                    while (!DateTime.TryParse(Console.ReadLine(), out value)|(value > rngMax | value < rngMin))
+                    while (!DateTime.TryParse(Console.ReadLine(), out value) | (value > rngMax | value < rngMin))
                     {
                         Console.Write(" Wrong Input. Enter a valid date (d/m/y):");
                     }
-                    
+
                     prop.SetValue(t, value);
                 }
                 else if (prop.PropertyType.Name == "Decimal")
@@ -148,7 +148,7 @@ namespace assignment2
                 Console.WriteLine(SuccessMessage);
                 SuccessMessage = string.Empty;
             }
-        } 
+        }
         #endregion
     }
 }
